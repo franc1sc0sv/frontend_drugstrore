@@ -8,6 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
 import Header from "../components/Header";
+import { PaymentIntent } from "../types/order";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC);
 
@@ -76,18 +77,23 @@ const InjectedCheckoutForm = () => {
 };
 
 const PaymentsPageWithStripe = () => {
-  const params = useParams();
-  const { id } = params;
+  const { orderId, paymentId } = useParams();
 
   const { data, loading, error } = useQuery(GET_ORDER_BY_ID_QUERY, {
-    variables: { orderIdDto: { id } },
+    variables: { orderIdDto: { id: orderId } },
   });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   if (!data?.getOrderById) return <p>Error: No se encontró la orden</p>;
 
-  const { stripeClientSecret } = data.getOrderById.payments[0];
+  const payment: PaymentIntent = data.getOrderById.payments.find(
+    (payment: PaymentIntent) => payment.id === paymentId
+  );
+
+  const stripeClientSecret = payment
+    ? payment.stripeClientSecret
+    : data.getOrderById.payments[0].stripeClientSecret;
 
   return (
     <Elements
@@ -95,7 +101,13 @@ const PaymentsPageWithStripe = () => {
       options={{ clientSecret: stripeClientSecret }}
     >
       <Header />
-      <InjectedCheckoutForm />
+      {payment?.id &&
+      payment?.stripeStatus !== "requires_payment_method" &&
+      payment?.stripeStatus !== "payment_intent.payment_failed" ? (
+        "Invalid paymentId"
+      ) : (
+        <InjectedCheckoutForm />
+      )}
     </Elements>
   );
 };

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaUser, FaShoppingCart, FaBoxOpen } from "react-icons/fa";
 
 const Header: React.FC = () => {
-  const user = { name: "Antonia Funk" };
+  const user = { name: "default" };
 
   return (
     <header className="p-4 text-gray-800">

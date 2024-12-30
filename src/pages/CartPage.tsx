@@ -11,7 +11,7 @@ import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 
 const CartPage: React.FC = () => {
-  const { data, loading, error } = useQuery(GET_CART);
+  const { data, loading } = useQuery(GET_CART);
   const [addItemToCart] = useMutation(ADD_ITEM_TO_CART);
   const [removeCartItem] = useMutation(REMOVE_CART_ITEM);
   const [total, setTotal] = useState<number>(0);
@@ -56,7 +56,6 @@ const CartPage: React.FC = () => {
   }, [data]);
 
   if (loading) return <p>Loading Cart...</p>;
-  if (error) return <p>Error loading cart</p>;
 
   const cartItems = data?.getCart?.cartItems || [];
 

@@ -14,7 +14,11 @@ export const routes: RouteObject[] = [
     path: "/cart",
     element: <CartPage />,
   },
-  { path: "/payments/:id", element: <PaymentsPageWithStripe /> },
+  {
+    path: "/payments/:orderId/:paymentId?",
+    element: <PaymentsPageWithStripe />,
+  },
+
   { path: "/confirm", element: <PaymentConfirmationPage /> },
   { path: "/orders", element: <OrdersPage /> },
 ];

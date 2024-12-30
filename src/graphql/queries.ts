@@ -105,7 +105,9 @@ export const GET_ORDER_BY_ID_QUERY = gql`
       createdAt
       userId
       payments {
+        id
         stripeClientSecret
+        stripeStatus
       }
       orderItems {
         id
