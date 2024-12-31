@@ -4,7 +4,7 @@ const token = import.meta.env.VITE_JWT_DEFAULT_TOKEN;
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'http://localhost:3000/graphql',
+    uri: import.meta.env.VITE_API_BASE_URL + '/graphql',
     headers: {
       Authorization: token ? `Bearer ${token}` : '',
       
